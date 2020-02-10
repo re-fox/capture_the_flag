@@ -33,6 +33,8 @@ class MyPipe():
         pass
     def close(self):
         self.outpipe.close()
+    def fstat(self):
+        return os.fstat(sys.stdin.fileno())
     
 def breakpoint(ql):
     #If RAX == 1 then we have a correct character, otherwise it's false
