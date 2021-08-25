@@ -1,9 +1,10 @@
+import sys
+from qiling import *
 from unicorn import *
 from unicorn.x86_const import *
+from qiling.os.posix.stat import Fstat
 
-import sys
 sys.path.append("..")
-from qiling import *
 
 #Number of correct characters
 user_data = [0]
@@ -34,7 +35,7 @@ class MyPipe():
     def close(self):
         self.outpipe.close()
     def fstat(self):
-        return os.fstat(sys.stdin.fileno())
+        return Fstat(sys.stdin.fileno())
     
 def breakpoint(ql):
     #If RAX == 1 then we have a correct character, otherwise it's false
@@ -51,7 +52,7 @@ def exec(flag):
     stdout = MyPipe()
     
     #Initialize ql
-    ql = Qiling(["/tmp/rabbithole"], "rootfs/x8664_linux", output = "off", stdin = stdin, stdout = stdout, stderr = sys.stderr)
+    ql = Qiling(["/tmp/rabbithole"], "rootfs/x8664_linux", stdin = stdin, stdout = stdout, stderr = sys.stderr)
     
     #Pass the flag
     stdin.write(bytes("".join(flag) + "\n", 'utf-8'))
